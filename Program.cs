@@ -1,7 +1,16 @@
+using CustomerList.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register the typed HttpClient for CustomerApiService
+builder.Services.AddHttpClient<CustomerApiService>();
+
+// In-memory caching, used by CustomerApiService to avoid re-hitting
+// the external API on every request.
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
@@ -9,21 +18,19 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
+// Customer is the default controller, so the table appears at the base URL.
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Customer}/{action=Index}/{id?}");
 
 app.Run();
