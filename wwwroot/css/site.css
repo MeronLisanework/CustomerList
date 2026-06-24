@@ -480,6 +480,262 @@ a {
     text-align: right;
     overflow-wrap: anywhere;
 }
+
+/* ===== Dashboard ===== */
+.dashboard-section {
+    margin-bottom: 28px;
+}
+
+.dashboard-section-title {
+    margin: 0 0 14px;
+    font-size: 0.95em;
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.kpi-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(20, 22, 40, 0.08);
+}
+.kpi-label {
+    font-size: 0.78em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-faint);
+}
+
+.kpi-value {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.kpi-subtext {
+    font-size: 0.82em;
+    color: var(--ink-soft);
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.chart-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+}
+
+.chart-card-canvas-wrap {
+    position: relative;
+    height: 240px;
+}
+
+.chart-card-wide {
+    grid-column: span 2;
+}
+
+.chart-card-title {
+    margin: 0 0 14px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+/* ----- Customer Analytics section ----- */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.analytics-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 18px 20px;
+}
+
+.analytics-card-wide {
+    grid-column: span 2;
+}
+
+.trend-indicator {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.trend-arrow {
+    font-size: 1.1em;
+}
+
+.trend-value {
+    font-size: 1.8em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.trend-up {
+    color: var(--success);
+}
+
+.trend-down {
+    color: #c0392b;
+}
+
+.analytics-subtext {
+    margin: 0;
+    font-size: 0.88em;
+    color: var(--ink-soft);
+}
+
+.analytics-insight {
+    margin: 0 0 10px;
+    font-size: 0.92em;
+    color: var(--ink-soft);
+    line-height: 1.5;
+}
+
+.analytics-insight:last-child {
+    margin-bottom: 0;
+}
+
+.analytics-insight strong {
+    color: var(--ink);
+}
+
+.analytics-table {
+    margin: 0;
+}
+
+.analytics-table td {
+    padding: 10px 8px;
+}
+
+/* ==========================================================================
+   UI Polish Additions (Full Width Equal Spacing Version)
+   ========================================================================== */
+
+/* Enables smooth layout transitions between anchor targets */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Cushions the top section edges from hitting the browser header viewport directly */
+.dashboard-section {
+    scroll-margin-top: 100px;
+}
+
+/* Jump Link Panel Header Ribbon - Expanded Full Width Layout */
+.dashboard-jump-nav {
+    display: flex;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 0; /* Clear padding fields internally to stretch links fully to edge */
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 10px;
+    z-index: 10;
+    width: 100%;
+}
+
+.jump-link {
+    flex: 1; /* Automatically stretches item block components across total container width */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Horizontally centers content inside the distributed cells */
+    gap: 8px;
+    color: var(--ink-soft);
+    font-size: 0.9em;
+    font-weight: 600;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+
+/* Adds elegant, uniform vertical divider borders between links */
+.jump-link:not(:last-child) {
+    border-right: 1px solid var(--border);
+}
+
+.jump-link:hover {
+    color: var(--accent);
+    text-decoration: none;
+    background-color: #fafdff; /* subtle hover background flash */
+}
+
+.jump-link svg {
+    color: var(--ink-faint);
+    transition: color 0.15s ease;
+}
+
+.jump-link:hover svg {
+    color: var(--accent);
+}
+
+/* Inline SVG alignment adjustment inside layout components */
+.chart-card-title svg,
+.dashboard-section-title svg,
+.kpi-label svg {
+    flex-shrink: 0;
+}
+
+/* Responsive collapse for smaller responsive break viewports */
+@media (max-width: 768px) {
+    .dashboard-jump-nav {
+        flex-direction: column;
+        padding: 8px 0;
+        position: relative;
+        top: 0;
+    }
+    
+    .jump-link {
+        padding: 12px 0;
+        width: 100%;
+    }
+    
+    .jump-link:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+}
+/* Ensure link ribbons adjust on mobile screens */
+@media (max-width: 600px) {
+    .dashboard-jump-nav {
+        flex-wrap: wrap;
+        gap: 12px;
+        position: relative;
+        top: 0;
+    }
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
     .site-nav {
@@ -515,6 +771,26 @@ a {
     grid-template-columns: 1fr;
 }
 
+.kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-card-wide {
+        grid-column: span 1;
+    }
+
+    .analytics-grid {
+    grid-template-columns: 1fr;
+}
+
+.analytics-card-wide {
+    grid-column: span 1;
+}
+
     .filter-actions {
         justify-content: space-between;
     }
@@ -534,10 +810,15 @@ a {
         font-size: 1.4em;
     }
 
-    .customer-table th,
+   .customer-table th,
     .customer-table td {
         padding: 10px 12px;
         font-size: 0.85em;
     }
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
 }
+
 

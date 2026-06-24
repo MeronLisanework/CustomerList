@@ -1,0 +1,280 @@
+@model CustomerList.Models.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var monthlyTrendLabelsJson = System.Text.Json.JsonSerializer.Serialize(Model.MonthlyTrend.Labels);
+    var monthlyTrendValuesJson = System.Text.Json.JsonSerializer.Serialize(Model.MonthlyTrend.Values);
+    var yearlyLabelsJson = System.Text.Json.JsonSerializer.Serialize(Model.YearlyTrend.Labels);
+    var yearlyValuesJson = System.Text.Json.JsonSerializer.Serialize(Model.YearlyTrend.Values);
+}
+
+<div class="customer-page">
+    <div class="customer-page-header">
+        <h1>Executive Dashboard</h1>
+        <p class="customer-count">Executive overview of customer data</p>
+    </div>
+
+    <div class="dashboard-jump-nav">
+        <a href="#section-overview" class="jump-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Overview
+        </a>
+        <a href="#section-charts" class="jump-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M11 2v20c-5.07-.5-9-4.75-9-10S5.93 2.5 11 2zm2 0c5.07.5 9 4.75 9 10s-3.93 9.5-9 10V2z"/></svg>
+            Visualizations
+        </a>
+        <a href="#section-trends" class="jump-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+            Trends
+        </a>
+        <a href="#section-analytics" class="jump-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 2v4h14V5H5zm0 6v4h14v-4H5zm0 6v4h14v-4H5z"/></svg>
+            Analytics Module
+        </a>
+    </div>
+
+    @if (Model.ErrorMessage != null)
+    {
+        <div class="customer-error">
+            <strong>Couldn't load dashboard data.</strong> @Model.ErrorMessage
+            <a asp-action="Index" class="retry-link">Try again</a>
+        </div>
+    }
+    else
+    {
+        <div class="dashboard-section" id="section-overview">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align: text-top; margin-right: 4px; color: var(--accent);"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 1.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        Total customers
+                    </span>
+                    <span class="kpi-value">@Model.TotalCustomers.ToString("N0")</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align: text-top; margin-right: 4px; color: var(--success);"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-4h-2V7h2v2z"/></svg>
+                        Active customers
+                    </span>
+                    <span class="kpi-value">@Model.ActiveCustomers.ToString("N0")</span>
+                    <span class="kpi-subtext">@Model.ActivePercentage.ToString("0.#")% of total</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align: text-top; margin-right: 4px; color: #d8973c;"><path d="M12 2l-5.5 9h11zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zM3 13.5h8v8H3z"/></svg>
+                        Person vs company
+                    </span>
+                    <span class="kpi-value">@Model.IndividualCount.ToString("N0") / @Model.OrganizationCount.ToString("N0")</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" style="vertical-align: text-top; margin-right: 4px; color: var(--accent-dark);"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+                        New this month
+                    </span>
+                    <span class="kpi-value">@Model.NewCustomersThisMonth.ToString("N0")</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section" id="section-charts">
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93h2c0 2.76 2.24 5 5 5v2.93zm-1-4.93V4.07c3.95.49 7 3.85 7 7.93h-7z"/></svg>
+                        Customer status
+                    </h3>
+                    <div class="chart-card-canvas-wrap">
+                        <canvas id="customerStatusChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L12 15v5c0 .34.1.66.28.93zm7.79-5.6c-.21-.58-.53-1.1-.94-1.54L15 11V5c0-1.1-.9-2-2-2h-1v4.21L6.31 4.31c1.45-1.44 3.48-2.31 5.69-2.31 4.42 0 8 3.58 8 8 0 1.55-.44 3-1.21 4.23z"/></svg>
+                        Customer type
+                    </h3>
+                    <div class="chart-card-canvas-wrap">
+                        <canvas id="customerTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section" id="section-trends">
+            <div class="chart-grid">
+                <div class="chart-card chart-card-wide">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M23 8c0 1.1-.9 2-2 2-.18 0-.35-.02-.51-.07l-3.56 3.55c.05.16.07.33.07.52 0 1.1-.9 2-2 2s-2-.9-2-2c0-.19.02-.36.07-.52l-2.55-2.55c-.16.05-.33.07-.52.07s-.36-.02-.52-.07l-4.55 4.56c.05.16.07.33.07.52 0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2c.19 0 .36.02.52.07l4.56-4.55C3.02 9.36 3 9.19 3 9c0-1.1.9-2 2-2s2 .9 2 2c0 .19-.02.36-.07.52l2.55 2.55c.16-.05.33-.07.52-.07s.36.02.52.07l3.55-3.56C14.02 8.35 14 8.18 14 8c0-1.1.9-2 2-2s2 .9 2 2c0 .19-.02.36-.07.52l3.56 3.56c.16-.05.33-.07.52-.07 1.1 0 2 .9 2 2z"/></svg>
+                        New customers over time
+                    </h3>
+                    <div class="chart-card-canvas-wrap">
+                        <canvas id="monthlyTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section">
+            <div class="chart-grid">
+                <div class="chart-card chart-card-wide">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M10 20h4V4h-4v16zm-6 0h4v-8H4v8zM16 9v11h4V9h-4z"/></svg>
+                        New customers by year
+                    </h3>
+                    <div class="chart-card-canvas-wrap">
+                        <canvas id="yearlyTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-section" id="section-analytics">
+            <h2 class="dashboard-section-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--accent);"><path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/></svg>
+                Customer Analytics
+            </h2>
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                        Year-over-year growth
+                    </h3>
+                    @if (Model.YearOverYearGrowthPercent.HasValue)
+                    {
+                        <div class="trend-indicator @(Model.YearOverYearGrowthPercent >= 0 ? "trend-up" : "trend-down")">
+                            <span class="trend-arrow">@(Model.YearOverYearGrowthPercent >= 0 ? "▲" : "▼")</span>
+                            <span class="trend-value">@Math.Abs(Model.YearOverYearGrowthPercent.Value).ToString("0.#")%</span>
+                        </div>
+                        <p class="analytics-subtext">
+                            @Model.CurrentYearNewCustomers.ToString("N0") new customers this year,
+                            compared to @Model.PreviousYearNewCustomers.ToString("N0") last year.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="analytics-subtext">Not enough year-over-year data yet to calculate growth.</p>
+                    }
+                </div>
+
+                <div class="analytics-card">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.5 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Customer base health
+                    </h3>
+                    <p class="analytics-insight">
+                        <strong>@Model.ActivePercentage.ToString("0.#")%</strong> of your
+                        @Model.TotalCustomers.ToString("N0") customers are currently active.
+                    </p>
+                    <p class="analytics-insight">
+                        Your customer base is
+                        <strong>@Model.IndividualCount.ToString("N0")</strong> individuals and
+                        <strong>@Model.OrganizationCount.ToString("N0")</strong> organizations.
+                    </p>
+                </div>
+
+                <div class="analytics-card analytics-card-wide">
+                    <h3 class="chart-card-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" style="vertical-align: middle; margin-right: 6px; color: var(--ink-soft);"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        Recently added customers
+                    </h3>
+                    @if (!Model.RecentCustomers.Any())
+                    {
+                        <p class="analytics-subtext">No recent customer records found.</p>
+                    }
+                    else
+                    {
+                        <table class="customer-table analytics-table">
+                            <tbody>
+                                @foreach (var recent in Model.RecentCustomers)
+                                {
+                                    <tr class="clickable-row" onclick="window.location='@Url.Action("Details", "Customer", new { id = recent.Id })'">
+                                        <td class="cell-code">@recent.Code</td>
+                                        <td class="cell-name">@recent.DisplayName</td>
+                                        <td class="cell-muted">@(recent.CreatedOn?.ToString("dd MMM yyyy") ?? "—")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/lib/chartjs/dist/chart.umd.min.js"></script>
+    <script>
+        (function () {
+            var accent = '#4f5fe0';
+
+            new Chart(document.getElementById('customerStatusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Active', 'Inactive'],
+                    datasets: [{
+                        data: [@Model.ActiveCustomers, @Model.InactiveCustomers],
+                        backgroundColor: ['#1ea672', '#c7c9d6']
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            new Chart(document.getElementById('customerTypeChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Person', 'Company'],
+                    datasets: [{
+                        data: [@Model.IndividualCount, @Model.OrganizationCount],
+                        backgroundColor: [accent, '#d8973c']
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+
+            new Chart(document.getElementById('monthlyTrendChart'), {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(monthlyTrendLabelsJson),
+                    datasets: [{
+                        label: 'New customers',
+                        data: @Html.Raw(monthlyTrendValuesJson),
+                        borderColor: accent,
+                        backgroundColor: 'rgba(79, 95, 224, 0.12)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+
+            new Chart(document.getElementById('yearlyTrendChart'), {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(yearlyLabelsJson),
+                    datasets: [{
+                        label: 'New customers',
+                        data: @Html.Raw(yearlyValuesJson),
+                        backgroundColor: accent
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+        })();
+        
+    </script>
+}
