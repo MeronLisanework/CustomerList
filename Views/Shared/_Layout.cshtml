@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+    <div id="page-loading-bar"></div>
+
     <header>
         <nav class="site-nav">
             <a class="site-nav-brand" asp-area="" asp-controller="Customer" asp-action="Index">Customer List</a>
@@ -26,5 +28,40 @@
     </footer>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Lightweight loading indicator: this app is server-rendered, so
+        // "loading" means the browser is waiting on a full page navigation.
+        // Show a thin bar the moment a relevant link/form triggers that
+        // navigation, so a slow API response doesn't look like a freeze.
+        (function () {
+            var bar = document.getElementById('page-loading-bar');
+
+            function showBar() {
+                bar.classList.add('active');
+            }
+
+            // Any same-page form submission (search/filter/sort/page-size)
+            document.addEventListener('submit', function () {
+                showBar();
+            });
+
+            // Internal navigation links (sort headers, pagination, row clicks,
+            // nav links) -- skip ones that open in a new tab or are external.
+            document.addEventListener('click', function (e) {
+                var link = e.target.closest('a');
+                if (!link) return;
+                if (link.target === '_blank') return;
+                if (link.hasAttribute('download')) return;
+                var href = link.getAttribute('href');
+                if (!href || href.startsWith('#')) return;
+                showBar();
+            });
+
+            // Clickable table rows use onclick + window.location, so the
+            // bar needs to show before that navigation begins too.
+            window.addEventListener('beforeunload', showBar);
+        })();
+    </script>
 </body>
 </html>

@@ -1,0 +1,124 @@
+@model CustomerList.Models.Customer
+
+@{
+    ViewData["Title"] = $"Customer #{Model.Id}";
+
+    var sections = new List<(string Title, List<(string Label, string Value)> Fields)>
+    {
+        ("Identification", new List<(string, string)>
+        {
+            ("ID", Model.Id.ToString()),
+            ("Code", Model.Code ?? "—"),
+            ("Title", Model.Title ?? "—"),
+            ("First Name", Model.FirstName ?? "—"),
+            ("Second Name", Model.SecondName ?? "—"),
+            ("Third Name", Model.ThirdName ?? "—"),
+            ("Gender", Model.Gender ?? "—"),
+            ("Nationality", Model.Nationality ?? "—"),
+            ("Marital Status", Model.MaritalStatus ?? "—"),
+        }),
+        ("Official Documents", new List<(string, string)>
+        {
+            ("TIN", Model.Tin ?? "—"),
+            ("National ID", Model.NationalId ?? "—"),
+            ("Passport ID", Model.PassportId ?? "—"),
+            ("Biometric ID", Model.BioId ?? "—"),
+        }),
+        ("Organization", new List<(string, string)>
+        {
+            ("Business Type", Model.BusinessType ?? "—"),
+            ("Department", Model.Department ?? "—"),
+            ("Branch", Model.Branch ?? "—"),
+            ("Position", Model.Position ?? "—"),
+            ("Parent ID", Model.ParentId?.ToString() ?? "—"),
+            ("Main Consignee Unit", Model.MainConsigneeUnit?.ToString() ?? "—"),
+        }),
+        ("Preferences", new List<(string, string)>
+        {
+            ("Preference", Model.Preference?.ToString() ?? "—"),
+            ("Default Language", Model.DefaultLanguage ?? "—"),
+            ("Default Currency", Model.DefaultCurrency ?? "—"),
+            ("Communication Source", Model.CommunicationSource ?? "—"),
+            ("Default Image URL", Model.DefaultImageUrl ?? "—"),
+        }),
+        ("Financial", new List<(string, string)>
+        {
+            ("Credit Limit", Model.CreditLimit?.ToString("N2") ?? "—"),
+            ("Transaction Limit", Model.TransactionLimit?.ToString("N2") ?? "—"),
+        }),
+        ("Record Info", new List<(string, string)>
+        {
+            ("Start Date", Model.StartDate?.ToString("dd MMM yyyy") ?? "—"),
+            ("Created On", Model.CreatedOn?.ToString("dd MMM yyyy, HH:mm") ?? "—"),
+            ("Last Modified", Model.LastModified?.ToString("dd MMM yyyy, HH:mm") ?? "—"),
+            ("Locked", Model.Locked ? "Yes" : "No"),
+        })
+    };
+
+    var hasNotes = !string.IsNullOrWhiteSpace(Model.Note) || !string.IsNullOrWhiteSpace(Model.Remark);
+}
+
+<div class="customer-page">
+    <a asp-action="Index" class="back-link">&larr; Back to customer list</a>
+
+    <div class="details-header">
+        <h1>@(string.IsNullOrWhiteSpace(Model.FullName) ? "(No name)" : Model.FullName)</h1>
+        <div class="details-header-meta">
+            <span class="cell-code">@Model.Code</span>
+            @if (Model.IsActive)
+            {
+                <span class="status-badge status-active">Active</span>
+            }
+            else
+            {
+                <span class="status-badge status-inactive">Inactive</span>
+            }
+            <span class="status-badge status-neutral">@(Model.IsPerson ? "Individual" : "Organization")</span>
+        </div>
+    </div>
+
+    <div class="details-table-card">
+        <div class="details-table-card">
+        @foreach (var group in sections)
+        {
+            <div class="details-section">
+                <h2 class="details-section-title">@group.Title</h2>
+                <div class="details-fields-grid">
+                    @for (int i = 0; i < group.Fields.Count; i++)
+                    {
+                        <div class="details-field @(i % 2 == 0 ? "details-field-alt" : "")">
+                            <span class="details-label">@group.Fields[i].Label</span>
+                            <span class="details-value">@group.Fields[i].Value</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+                </div>
+            </div>
+        }
+
+        @if (hasNotes)
+        {
+            <div class="details-section">
+                <h2 class="details-section-title">Notes</h2>
+                <div class="details-fields-grid details-fields-grid-single">
+                    @if (!string.IsNullOrWhiteSpace(Model.Note))
+                    {
+                        <div class="details-field details-field-alt">
+                            <span class="details-label">Note</span>
+                            <span class="details-value">@Model.Note</span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                    {
+                        <div class="details-field">
+                            <span class="details-label">Remark</span>
+                            <span class="details-value">@Model.Remark</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

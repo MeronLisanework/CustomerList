@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -75,10 +76,24 @@ public class CustomerApiService
             _logger.LogError(ex, "Network error fetching customers");
             throw new ApplicationException("Unable to connect to the Customer API. Please check the network connection.", ex);
         }
+        catch (TaskCanceledException ex)
+        {
+            // HttpClient.Timeout firing surfaces as TaskCanceledException,
+            // not HttpRequestException -- handled separately so the
+            // message correctly says "timed out" rather than "unreachable".
+            _logger.LogError(ex, "Customer API request timed out");
+            throw new ApplicationException("The Customer API took too long to respond. Please try again.", ex);
+        }
         catch (JsonException ex)
         {
             _logger.LogError(ex, "Unexpected JSON shape from customer API");
             throw new ApplicationException("The Customer API returned unexpected data.", ex);
         }
+    }
+
+    public async Task<Customer?> GetCustomerByIdAsync(int id)
+    {
+        var customers = await GetCustomersAsync();
+        return customers.FirstOrDefault(c => c.Id == id);
     }
 }

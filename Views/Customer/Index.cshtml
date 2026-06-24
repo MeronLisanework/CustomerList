@@ -19,107 +19,116 @@
         <p class="customer-count">@Model.TotalCount total records</p>
     </div>
 
-    <form method="get" asp-action="Index" class="customer-filters">
-        <div class="filter-field filter-field-search">
-            <label for="searchTerm">Search</label>
-            <input type="text" id="searchTerm" name="searchTerm"
-                   value="@Model.SearchTerm" placeholder="Search by name or code..." />
-        </div>
-
-        <div class="filter-field">
-            <label for="type">Type</label>
-            <select id="type" name="type">
-                <option value="">All Types</option>
-                <option value="person" selected="@(Model.TypeFilter == "person")">Person</option>
-                <option value="company" selected="@(Model.TypeFilter == "company")">Company</option>
-            </select>
-        </div>
-
-        <div class="filter-field">
-            <label for="status">Status</label>
-            <select id="status" name="status">
-                <option value="">All Statuses</option>
-                <option value="active" selected="@(Model.StatusFilter == "active")">Active</option>
-                <option value="inactive" selected="@(Model.StatusFilter == "inactive")">Inactive</option>
-            </select>
-        </div>
-
-        <div class="filter-field">
-            <label for="pageSize">Per page</label>
-            <select id="pageSize" name="pageSize">
-                @foreach (var size in new[] { 5, 10, 20, 50, 100 })
-                {
-                    <option value="@size" selected="@(Model.PageSize == size)">@size</option>
-                }
-            </select>
-        </div>
-
-        <input type="hidden" name="sortBy" value="@Model.SortBy" />
-        <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
-
-        <div class="filter-actions">
-            <button type="submit">Apply</button>
-            @if (Model.HasFilters)
-            {
-                <a class="clear-filters" asp-action="Index">Clear filters</a>
-            }
-        </div>
-    </form>
-
-    @if (!Model.Customers.Any())
+    @if (Model.ErrorMessage != null)
     {
-        <div class="customer-empty">
-            No customers found.
+        <div class="customer-error">
+            <strong>Couldn't load customers.</strong> @Model.ErrorMessage
+            <a asp-action="Index" class="retry-link">Try again</a>
         </div>
     }
     else
     {
+        <form method="get" asp-action="Index" class="customer-filters">
+            <div class="filter-field filter-field-search">
+                <label for="searchTerm">Search</label>
+                <input type="text" id="searchTerm" name="searchTerm"
+                       value="@Model.SearchTerm" placeholder="Search by name or code..." />
+            </div>
+
+            <div class="filter-field">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                    <option value="">All Types</option>
+                    <option value="person" selected="@(Model.TypeFilter == "person")">Person</option>
+                    <option value="company" selected="@(Model.TypeFilter == "company")">Company</option>
+                </select>
+            </div>
+
+            <div class="filter-field">
+                <label for="status">Status</label>
+                <select id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="active" selected="@(Model.StatusFilter == "active")">Active</option>
+                    <option value="inactive" selected="@(Model.StatusFilter == "inactive")">Inactive</option>
+                </select>
+            </div>
+
+            <div class="filter-field">
+                <label for="pageSize">Per page</label>
+                <select id="pageSize" name="pageSize">
+                    @foreach (var size in new[] { 5, 10, 20, 50, 100 })
+                    {
+                        <option value="@size" selected="@(Model.PageSize == size)">@size</option>
+                    }
+                </select>
+            </div>
+
+            <input type="hidden" name="sortBy" value="@Model.SortBy" />
+            <input type="hidden" name="sortDirection" value="@Model.SortDirection" />
+
+            <div class="filter-actions">
+                <button type="submit">Apply</button>
+                @if (Model.HasFilters)
+                {
+                    <a class="clear-filters" asp-action="Index">Clear filters</a>
+                }
+            </div>
+        </form>
+
+        @if (!Model.Customers.Any())
+        {
+            <div class="customer-empty">
+                No customers found.
+            </div>
+        }
+        else
+        {
         <div class="customer-table-card">
             <table class="customer-table">
-                <thead>
-                    <tr>
-                        <th class="sortable">
-                            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
-                               asp-route-status="@Model.StatusFilter" asp-route-sortBy="id"
-                               asp-route-sortDirection="@NextDirection("id")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
-                                <span>ID</span>
-                                @if (IsSortedBy("id"))
-                                {
-                                    <span class="sort-arrow">@(IsAscending ? "▲" : "▼")</span>
-                                }
-                            </a>
-                        </th>
-                        <th class="sortable">
-                            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
-                               asp-route-status="@Model.StatusFilter" asp-route-sortBy="code"
-                               asp-route-sortDirection="@NextDirection("code")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
-                                <span>Code</span>
-                                @if (IsSortedBy("code"))
-                                {
-                                    <span class="sort-arrow">@(IsAscending ? "▲" : "▼")</span>
-                                }
-                            </a>
-                        </th>
-                        <th class="sortable">
-                            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
-                               asp-route-status="@Model.StatusFilter" asp-route-sortBy="name"
-                               asp-route-sortDirection="@NextDirection("name")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
-                                <span>Name</span>
-                                @if (IsSortedBy("name"))
-                                {
-                                    <span class="sort-arrow">@(IsAscending ? "▲" : "▼")</span>
-                                }
-                            </a>
-                        </th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Start Date</th>
-                    </tr>
-                </thead>
+               <thead>
+    <tr>
+        <th class="sortable">
+            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
+               asp-route-status="@Model.StatusFilter" asp-route-sortBy="id"
+               asp-route-sortDirection="@NextDirection("id")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
+                <span>ID</span>
+                <span class="sort-arrows">
+                    <span class="sort-arrow-up @(IsSortedBy("id") && IsAscending ? "active" : "")">▲</span>
+                    <span class="sort-arrow-down @(IsSortedBy("id") && !IsAscending ? "active" : "")">▼</span>
+                </span>
+            </a>
+        </th>
+        <th class="sortable">
+            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
+               asp-route-status="@Model.StatusFilter" asp-route-sortBy="code"
+               asp-route-sortDirection="@NextDirection("code")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
+                <span>Code</span>
+                <span class="sort-arrows">
+                    <span class="sort-arrow-up @(IsSortedBy("code") && IsAscending ? "active" : "")">▲</span>
+                    <span class="sort-arrow-down @(IsSortedBy("code") && !IsAscending ? "active" : "")">▼</span>
+                </span>
+            </a>
+        </th>
+        <th class="sortable">
+            <a asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-type="@Model.TypeFilter"
+               asp-route-status="@Model.StatusFilter" asp-route-sortBy="name"
+               asp-route-sortDirection="@NextDirection("name")" asp-route-page="1" asp-route-pageSize="@Model.PageSize">
+                <span>Name</span>
+                <span class="sort-arrows">
+                    <span class="sort-arrow-up @(IsSortedBy("name") && IsAscending ? "active" : "")">▲</span>
+                    <span class="sort-arrow-down @(IsSortedBy("name") && !IsAscending ? "active" : "")">▼</span>
+                </span>
+            </a>
+        </th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Start Date</th>
+    </tr>
+</thead>
                 <tbody>
                     @foreach (var customer in Model.Customers)
                     {
-                        <tr>
+                        <tr class="clickable-row" onclick="window.location='@Url.Action("Details", "Customer", new { id = customer.Id })'">
                             <td class="cell-muted">@customer.Id</td>
                             <td class="cell-code">@customer.Code</td>
                             <td class="cell-name">@customer.DisplayName</td>
@@ -163,6 +172,7 @@
                    asp-route-status="@Model.StatusFilter" asp-route-sortBy="@Model.SortBy" asp-route-sortDirection="@Model.SortDirection"
                    asp-route-page="@(Model.PageNumber + 1)" asp-route-pageSize="@Model.PageSize">Next &rarr;</a>
             </nav>
+        }
         }
     }
 </div>

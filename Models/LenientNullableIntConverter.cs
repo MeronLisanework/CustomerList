@@ -4,9 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace CustomerList.Models;
 
-// Mirrors LenientStringConverter's reasoning but for nullable ints:
-// accepts a JSON number normally, but also tolerates a numeric string
-// (e.g. "12" instead of 12) instead of throwing.
 public class LenientNullableIntConverter : JsonConverter<int?>
 {
     public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

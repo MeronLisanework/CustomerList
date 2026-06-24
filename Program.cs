@@ -6,7 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 // Register the typed HttpClient for CustomerApiService
-builder.Services.AddHttpClient<CustomerApiService>();
+builder.Services.AddHttpClient<CustomerApiService>(client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(15);
+});
+
 
 // In-memory caching, used by CustomerApiService to avoid re-hitting
 // the external API on every request.

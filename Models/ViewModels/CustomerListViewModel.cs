@@ -10,6 +10,10 @@ public class CustomerListViewModel
 {
     public List<CustomerViewModel> Customers { get; set; } = new();
 
+    // Set when the API call failed -- the view shows this instead of
+    // crashing the whole page with the default error screen.
+    public string? ErrorMessage { get; set; }
+
     // Search
     public string? SearchTerm { get; set; }
 
