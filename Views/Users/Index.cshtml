@@ -1,0 +1,76 @@
+@model List<CustomerList.Models.ViewModels.UserListItemViewModel>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="customer-page">
+    <div class="customer-page-header">
+        <h1>Manage Users</h1>
+        <p class="customer-count">@Model.Count total accounts</p>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="customer-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <div class="filter-actions" style="margin-bottom: 20px;">
+        <a asp-action="Create" class="btn-primary-link">+ Create User</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="customer-empty">
+            No user accounts found.
+        </div>
+    }
+    else
+    {
+        <div class="customer-table-card">
+            <table class="customer-table">
+               <thead>
+    <tr>
+        <th>Email</th>
+        <th>Role(s)</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+</thead>
+                <tbody>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td class="cell-name">@user.Email</td>
+            <td>
+                @if (user.Roles.Any())
+                {
+                    @string.Join(", ", user.Roles)
+                }
+                else
+                {
+                    <span class="cell-muted">No role assigned</span>
+                }
+            </td>
+            <td>
+                @if (user.LockedOut)
+                {
+                    <span class="status-badge status-inactive">Locked out</span>
+                }
+                else
+                {
+                    <span class="status-badge status-active">Active</span>
+                }
+            </td>
+            <td>
+                <a asp-action="EditRole" asp-route-id="@user.Id">Edit Role</a>
+            </td>
+        </tr>
+    }
+</tbody>
+            </table>
+        </div>
+    }
+</div>

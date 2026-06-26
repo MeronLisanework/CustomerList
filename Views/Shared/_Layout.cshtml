@@ -10,14 +10,35 @@
     <div id="page-loading-bar"></div>
 
     <header>
-        <nav class="site-nav">
-            <a class="site-nav-brand" asp-area="" asp-controller="Customer" asp-action="Index">Customer List</a>
-           <ul class="site-nav-links">
-                <li><a asp-area="" asp-controller="Customer" asp-action="Index">Customers</a></li>
+<nav class="site-nav">
+    <a class="site-nav-brand" asp-area="" asp-controller="Customer" asp-action="Index">Customer List</a>
+    <ul class="site-nav-links">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <li><a asp-area="" asp-controller="Customer" asp-action="Index">Customers</a></li>
+
+            @if (User.IsInRole("Administrator") || User.IsInRole("Manager"))
+            {
                 <li><a asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
-                <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
-            </ul>
-        </nav>
+            }
+
+            @if (User.IsInRole("Administrator"))
+            {
+                <li><a asp-area="" asp-controller="Users" asp-action="Index">Manage Users</a></li>
+                <li><a asp-area="" asp-controller="Settings" asp-action="Index">Settings</a></li>
+            }
+        }
+        <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+    </ul>
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+            <span class="nav-user-role">@(User.IsInRole("Administrator") ? "Administrator" : User.IsInRole("Manager") ? "Manager" : "Employee")</span>
+            <span class="nav-user-email">@User.Identity.Name</span>
+            <button type="submit" class="nav-logout-btn">Log out</button>
+        </form>
+    }
+</nav>
     </header>
 
     <main role="main">

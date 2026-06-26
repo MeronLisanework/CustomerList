@@ -1,0 +1,21 @@
+@{
+    ViewData["Title"] = "Access Denied";
+    var hasAnyRole = User.IsInRole("Administrator") || User.IsInRole("Manager") || User.IsInRole("Employee");
+}
+
+<div class="customer-page">
+    <div class="customer-error" style="text-align: center; padding: 40px;">
+        <h1 style="margin-top: 0;">Access Denied</h1>
+        @if (!hasAnyRole)
+        {
+            <p>Your account hasn't been assigned a role yet. Please contact an administrator.</p>
+        }
+        else
+        {
+            <p>You don't have permission to view this page.</p>
+        }
+        <form asp-controller="Account" asp-action="Logout" method="post" style="display: inline; margin-top: 12px;">
+            <button type="submit" class="btn-primary-link" style="border: none; cursor: pointer;">Log out</button>
+        </form>
+    </div>
+</div>

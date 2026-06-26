@@ -85,6 +85,32 @@ a {
     color: var(--accent);
 }
 
+.nav-user-role {
+    font-size: 0.82em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--accent-dark);
+    background-color: #eef0fb;
+    border: 1px solid var(--accent);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+}
+
+.nav-logout-btn {
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 22px;
+    font-size: 0.92em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.nav-logout-btn:hover {
+    background-color: var(--accent-dark);
+}
 /* ===== Footer ===== */
 .site-footer {
     text-align: center;
@@ -245,13 +271,13 @@ a {
 }
 
 .customer-table thead th {
-    background-color: var(--surface);
-    color: var(--ink-faint);
+    background-color: var(--accent);
+    color: #fff;
     font-size: 0.78em;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    border-bottom: 1px solid var(--row-divider);
+    border-bottom: 1px solid var(--accent-dark);
     white-space: nowrap;
 }
 
@@ -259,11 +285,12 @@ a {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: var(--ink-faint);
+    color: #fff;
 }
 
 .customer-table th.sortable a:hover {
-    color: var(--accent);
+    color: #fff;
+    opacity: 0.8;
 }
 
 .sort-arrows {
@@ -276,13 +303,13 @@ a {
 .sort-arrow-up,
 .sort-arrow-down {
     font-size: 0.6em;
-    color: var(--ink-faint);
-    opacity: 0.5;
+    color: #fff;
+    opacity: 0.4;
 }
 
 .sort-arrow-up.active,
 .sort-arrow-down.active {
-    color: var(--accent);
+    color: #fff;
     opacity: 1;
 }
 .customer-table tbody tr {
@@ -738,16 +765,29 @@ html {
 
 /* ===== Responsive ===== */
 @media (max-width: 900px) {
-    .site-nav {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 14px 20px;
-    }
+   .site-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 20px;
+}
 
-    .site-nav-links {
-        gap: 16px;
-    }
+.site-nav-links {
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.login-card {
+    padding: 36px 28px 32px;
+    max-width: 100%;
+}
+
+.logout-form {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-left: auto;
+}
 
     .customer-page {
         padding: 20px 16px 40px;
@@ -821,4 +861,206 @@ html {
     }
 }
 
+/* ----- User management ----- */
+.customer-success {
+    background-color: #e6f7ef;
+    border: 1px solid #b8e8cf;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    color: #1a6b46;
+    margin-bottom: 20px;
+}
 
+.btn-primary,
+.btn-primary-link {
+    display: inline-block;
+    background-color: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.btn-primary:hover,
+.btn-primary-link:hover {
+    background-color: var(--accent-dark);
+    color: #fff;
+}
+
+.field-error {
+    display: block;
+    color: #c0392b;
+    font-size: 0.82em;
+    margin-top: 4px;
+}
+
+/* ----- Login page ----- */
+.login-body {
+    background-color: var(--bg);
+    background-image: radial-gradient(circle at 20% 20%, #eef0fb 0%, var(--bg) 55%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 24px;
+}
+
+
+.login-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.login-brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.login-brand-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.login-brand-name {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+}
+
+.login-title {
+    margin: 0 0 6px;
+    font-size: 1.7em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+}
+
+.login-subtitle {
+    margin: 0 0 30px;
+    color: var(--ink-soft);
+    font-size: 0.95em;
+}
+
+.login-field {
+    margin-bottom: 6px;
+}
+
+.login-field label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+
+.login-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.login-input-icon {
+    position: absolute;
+    left: 14px;
+    width: 18px;
+    height: 18px;
+    color: var(--ink-faint);
+    pointer-events: none;
+}
+
+.login-input-wrap input {
+    width: 100%;
+    padding: 8px 16px 8px 44px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.95em;
+    color: var(--ink);
+    background-color: var(--surface);
+}
+.login-input-wrap input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79, 95, 224, 0.12);
+}
+
+.login-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-top: 6px solid var(--accent);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px rgba(20, 22, 40, 0.04), 0 20px 40px rgba(20, 22, 40, 0.08);
+    padding: 48px 22px 44px;
+    width: 450px;
+    max-width: 90vw;
+}
+
+.login-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 26px;
+}
+
+.login-remember input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.login-remember label {
+    font-size: 0.88em;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin: 0;
+}
+
+.login-submit {
+    width: 100%;
+    padding: 13px;
+    font-size: 0.98em;
+    letter-spacing: 0.01em;
+}
+
+.login-footer-link {
+    margin: 26px 0 0;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--ink-soft);
+}
+
+.login-footer-link a {
+    font-weight: 600;
+}
+
+/* ----- Login form error banner (matches solid-red reference style) ----- */
+.login-card .customer-error {
+    background-color: #d6382c;
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.92em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-card .customer-error ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

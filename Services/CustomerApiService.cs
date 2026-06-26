@@ -20,7 +20,7 @@ public class CustomerApiService
     private readonly IMemoryCache _cache;
 
     private const string CacheKey = "Customers_All";
-    private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(2);
+    private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(10);
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {

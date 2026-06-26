@@ -5,9 +5,11 @@ using CustomerList.Models;
 using CustomerList.Models.ViewModels;
 using CustomerList.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomerList.Controllers;
 
+[Authorize(Roles = "Administrator,Manager,Employee")]
 public class CustomerController : Controller
 {
     private readonly CustomerApiService _customerApiService;

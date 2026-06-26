@@ -1,0 +1,37 @@
+@model CustomerList.Models.ViewModels.EditUserRoleViewModel
+
+@{
+    ViewData["Title"] = "Edit User Role";
+    var roles = ViewBag.Roles as List<string> ?? new List<string>();
+}
+
+<div class="customer-page">
+    <a asp-action="Index" class="back-link">&larr; Back to user list</a>
+
+    <div class="details-header">
+        <h1>Edit Role</h1>
+        <p class="customer-count">@Model.Email</p>
+    </div>
+
+    <div class="customer-table-card" style="padding: 24px 28px; max-width: 480px;">
+        <form asp-action="EditRole" method="post">
+            <div asp-validation-summary="ModelOnly" class="customer-error" style="display: block;"></div>
+
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="Email" />
+
+            <div class="filter-field" style="margin-bottom: 20px;">
+                <label asp-for="Role"></label>
+                <select asp-for="Role">
+                    @foreach (var role in roles)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+                <span asp-validation-for="Role" class="field-error"></span>
+            </div>
+
+            <button type="submit" class="btn-primary">Save Role</button>
+        </form>
+    </div>
+</div>

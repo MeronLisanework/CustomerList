@@ -1,0 +1,59 @@
+@model CustomerList.Models.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LoginLayout";
+}
+
+<div class="login-card">
+    <div class="login-brand">
+        <span class="login-brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <span class="login-brand-name">Customer List</span>
+    </div>
+
+    <h1 class="login-title">Create Account</h1>
+    <p class="login-subtitle">An administrator will assign your role after sign-up</p>
+
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="customer-error" style="display: block;"></div>
+
+        <div class="login-field">
+            <label asp-for="Email"></label>
+            <div class="login-input-wrap">
+                <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+                <input asp-for="Email" autofocus placeholder="you@example.com" />
+            </div>
+            <span asp-validation-for="Email" class="field-error"></span>
+        </div>
+
+        <div class="login-field">
+            <label asp-for="Password"></label>
+            <div class="login-input-wrap">
+                <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input asp-for="Password" placeholder="At least 8 characters" />
+            </div>
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+
+        <div class="login-field">
+            <label asp-for="ConfirmPassword"></label>
+            <div class="login-input-wrap">
+                <svg class="login-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <input asp-for="ConfirmPassword" placeholder="Re-enter your password" />
+            </div>
+            <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+        </div>
+
+        <button type="submit" class="btn-primary login-submit">Create Account</button>
+    </form>
+
+    <p class="login-footer-link">
+        Already have an account? <a asp-action="Login">Sign in</a>
+    </p>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

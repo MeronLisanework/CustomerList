@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using CustomerList.Models.ViewModels;
 using CustomerList.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CustomerList.Controllers;
-
+[Authorize(Roles = "Administrator,Manager")]
 public class DashboardController : Controller
 {
     private readonly CustomerApiService _customerApiService;
